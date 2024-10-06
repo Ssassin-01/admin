@@ -10,7 +10,7 @@ public class MainController {
 
     @GetMapping("/")
     public String helloPage() {
-        return "Hello, axios git test";
+        return "Hello, axios git test test";
     }
 
     @GetMapping("/admin")
