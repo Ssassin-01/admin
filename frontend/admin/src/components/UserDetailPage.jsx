@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import UserSub from "./Subscribe/components/UserSub";
 
 const UserDetailPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { email } = location.state || {};
+    const {email} = location.state || {};
     const [user, setUser] = useState(null);
     const [activeTab, setActiveTab] = useState("user");
 
@@ -20,40 +21,54 @@ const UserDetailPage = () => {
             .then(response => setUser(response.data))
             .catch(error => console.error('Error fetching user details!', error));
     }, [email, navigate]);
-
+    localStorage.setItem('userEmail', user.email);
+    localStorage.setItem('userNickname', user.nickname);
     if (!user) {
         return <div>Loading...</div>;
     }
 
     const studyData = [
-        { month: '1월', amount: 30 },
-        { month: '2월', amount: 45 },
-        { month: '3월', amount: 50 },
-        { month: '4월', amount: 70 },
-        { month: '5월', amount: 90 },
-        { month: '6월', amount: 120 },
+        {month: '1월', amount: 30},
+        {month: '2월', amount: 45},
+        {month: '3월', amount: 50},
+        {month: '4월', amount: 70},
+        {month: '5월', amount: 90},
+        {month: '6월', amount: 120},
     ];
 
     const translateIdentity = (identity) => {
         switch (identity) {
-            case 'elementary': return '초등학생';
-            case 'middle': return '중학생';
-            case 'high': return '고등학생';
-            case 'college': return '대학생';
-            case 'adult': return '어른';
-            default: return identity;
+            case 'elementary':
+                return '초등학생';
+            case 'middle':
+                return '중학생';
+            case 'high':
+                return '고등학생';
+            case 'college':
+                return '대학생';
+            case 'adult':
+                return '어른';
+            default:
+                return identity;
         }
     };
 
     const translateSignupPurpose = (purpose) => {
         switch (purpose) {
-            case 'elementary_vocabulary': return '초등영단어';
-            case 'middle_vocabulary': return '중등영단어';
-            case 'high_vocabulary': return '고등영단어';
-            case 'csat': return '수능';
-            case 'toeic': return '토익';
-            case 'toefl': return '토플';
-            default: return purpose;
+            case 'elementary_vocabulary':
+                return '초등영단어';
+            case 'middle_vocabulary':
+                return '중등영단어';
+            case 'high_vocabulary':
+                return '고등영단어';
+            case 'csat':
+                return '수능';
+            case 'toeic':
+                return '토익';
+            case 'toefl':
+                return '토플';
+            default:
+                return purpose;
         }
     };
 
@@ -79,12 +94,12 @@ const UserDetailPage = () => {
                         <h3 className="text-xl font-semibold mb-4">월별 학습량</h3>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={studyData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="monotone" dataKey="amount" stroke="#8884d8" />
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <XAxis dataKey="month"/>
+                                <YAxis/>
+                                <Tooltip/>
+                                <Legend/>
+                                <Line type="monotone" dataKey="amount" stroke="#8884d8"/>
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
@@ -142,8 +157,7 @@ const UserDetailPage = () => {
                     )}
                     {activeTab === "subscriptions" && (
                         <div className="bg-gray-100 p-4 rounded-lg">
-                            <h3 className="text-lg font-semibold">구독 정보</h3>
-                            <p className="text-gray-600">여기에 구독 정보가 표시됩니다.</p>
+                            <UserSub/>
                         </div>
                     )}
                 </div>

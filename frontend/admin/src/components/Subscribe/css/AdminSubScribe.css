@@ -1,0 +1,47 @@
+.admin-subscription-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+}
+
+.admin-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2F4156;
+    margin-bottom: 20px;
+}
+
+.subscription-details {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.subscription-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subscription-info p {
+    margin: 0;
+}
+
+.update-plan-button {
+    background-color: #4C3D29;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.update-plan-button:hover {
+    background-color: #7D6D57;
+}
