@@ -70,7 +70,6 @@ const AdminPage = () => {
             <main className="flex-1 p-10">
                 <header className="flex justify-between items-center mb-10">
                     <h1 className="text-3xl font-bold">관리자 페이지</h1>
-                    <span className="text-gray-500">환영합니다!</span>
                 </header>
 
                 <section className="bg-white p-6 rounded-lg shadow-md mb-10">
@@ -99,11 +98,11 @@ const AdminPage = () => {
                         <thead>
                         <tr className="bg-purple-200 text-purple-700">
                             <th className="border p-4 text-center font-medium">번호</th>
+                            <th className="border p-4 text-center font-medium">닉네임</th>
                             <th className="border p-4 text-center font-medium">이메일</th>
                             <th className="border p-4 text-center font-medium">생년월일</th>
                             <th className="border p-4 text-center font-medium">성별</th>
                             <th className="border p-4 text-center font-medium">신분</th>
-                            <th className="border p-4 text-center font-medium">닉네임</th>
                             <th className="border p-4 text-center font-medium">가입 목적</th>
                         </tr>
                         </thead>
@@ -111,10 +110,11 @@ const AdminPage = () => {
                         {users.map((user, index) => (
                             <tr key={user.email} className="even:bg-purple-50">
                                 <td className="border p-4 text-center">{index + 1}</td>
+                                <td className="border p-4 text-center">{user.nickname}</td>
                                 <td className="border p-4 text-center">
                                     <Link
                                         to="/user-detail"
-                                        state={{ email: user.email }}
+                                        state={{email: user.email}}
                                         className="text-blue-600 underline"
                                     >
                                         {user.email}
@@ -123,7 +123,6 @@ const AdminPage = () => {
                                 <td className="border p-4 text-center">{user.date}</td>
                                 <td className="border p-4 text-center">{user.gender === 0 ? "남" : "여"}</td>
                                 <td className="border p-4 text-center">{translateIdentity(user.identity)}</td>
-                                <td className="border p-4 text-center">{user.nickname}</td>
                                 <td className="border p-4 text-center">{translateSignupPurpose(user.signupPurpose)}</td>
                             </tr>
                         ))}
@@ -134,5 +133,4 @@ const AdminPage = () => {
         </div>
     );
 };
-
 export default AdminPage;
