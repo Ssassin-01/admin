@@ -1,7 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from 'recharts';
 import UserSub from "./Subscribe/components/UserSub";
 
 const UserDetailPage = () => {
@@ -21,8 +30,16 @@ const UserDetailPage = () => {
             .then(response => setUser(response.data))
             .catch(error => console.error('Error fetching user details!', error));
     }, [email, navigate]);
-    localStorage.setItem('userEmail', user.email);
-    localStorage.setItem('userNickname', user.nickname);
+
+    // user가 null인 경우 조건부로 localStorage 호출 방지
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userNickname', user.nickname);
+        }
+    }, [user]);
+
+    // user가 로드되지 않았을 때 로딩 상태 표시
     if (!user) {
         return <div>Loading...</div>;
     }

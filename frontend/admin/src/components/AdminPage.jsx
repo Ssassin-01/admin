@@ -95,7 +95,7 @@ const AdminPage = () => {
 
                 <section className="bg-white p-6 rounded-lg shadow-lg">
                     <h2 className="text-xl font-semibold mb-4">유저 목록</h2>
-                    <table className="w-full text-left border-collapse">npm
+                    <table className="w-full text-left border-collapse">
                         <thead>
                         <tr className="bg-purple-200 text-purple-700">
                             <th className="border p-4 text-center font-medium">번호</th>
