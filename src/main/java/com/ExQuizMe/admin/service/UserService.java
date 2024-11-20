@@ -3,9 +3,12 @@ package com.ExQuizMe.admin.service;
 import com.ExQuizMe.admin.dto.UserDetailDTO;
 import com.ExQuizMe.admin.dto.UserDto;
 import com.ExQuizMe.admin.entity.User;
+import com.ExQuizMe.admin.repository.CardAccessLogRepository;
+import com.ExQuizMe.admin.repository.CardBookmarkRepository;
 import com.ExQuizMe.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +20,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CardAccessLogRepository cardAccessLogRepository;
+
+    @Autowired
+    private CardBookmarkRepository cardBookmarkRepository; // 추가
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -38,7 +47,8 @@ public class UserService {
     }
 
     public UserDetailDTO getUserDetails(String email) {
-        User user = userRepository.findById(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         return new UserDetailDTO(
                 user.getEmail(),
                 user.getNickname(),
@@ -52,7 +62,41 @@ public class UserService {
         );
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findById(email).orElse(null);
+    public UserDetailDTO updateUser(String email, UserDetailDTO userDetailDTO) {
+        User user = userRepository.findById(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setNickname(userDetailDTO.getNickname());
+        user.setIdentity(userDetailDTO.getIdentity());
+        user.setSignupPurpose(userDetailDTO.getSignupPurpose());
+        user.setTelNumber(userDetailDTO.getTelNumber());
+        user.setOneLineResolution(userDetailDTO.getOneLineResolution());
+
+        userRepository.save(user);
+
+        return new UserDetailDTO(
+                user.getEmail(),
+                user.getNickname(),
+                user.getDate(),
+                user.getGender(),
+                user.getIdentity(),
+                user.getSignupPurpose(),
+                user.getTelNumber(),
+                user.getOneLineResolution(),
+                user.getPermission()
+        );
+    }
+
+    @Transactional
+    public void deleteUser(String email) {
+        User user = userRepository.findById(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 관련 데이터 명시적 삭제
+        cardAccessLogRepository.deleteByUserEmail(email);
+        cardBookmarkRepository.deleteByUserEmail(email); // 추가
+
+        // User 삭제
+        userRepository.delete(user);
     }
 }

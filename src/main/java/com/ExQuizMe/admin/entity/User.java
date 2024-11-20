@@ -26,7 +26,7 @@ public class User {
     @Column(name = "nickname")
     private String nickname;
 
-    @Column(unique = true, name = "tel_number")
+    @Column(name = "tel_Number", unique = true)
     private String telNumber;
 
     @Column(name = "date")

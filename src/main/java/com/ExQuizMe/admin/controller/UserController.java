@@ -2,34 +2,39 @@ package com.ExQuizMe.admin.controller;
 
 import com.ExQuizMe.admin.dto.UserDetailDTO;
 import com.ExQuizMe.admin.dto.UserDto;
-import com.ExQuizMe.admin.entity.User;
-import com.ExQuizMe.admin.repository.UserRepository;
 import com.ExQuizMe.admin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping("/api/users")
+    @GetMapping
     public List<UserDto> getAllUsers() {
         return userService.getAllUsersWithBasicInfo();
     }
 
-
-
-    @GetMapping("/api/users/{email}")
+    @GetMapping("/{email}")
     public UserDetailDTO getUserDetails(@PathVariable String email) {
         return userService.getUserDetails(email);
+    }
+
+    // 회원 정보 수정
+    @PutMapping("/{email}")
+    public UserDetailDTO updateUser(@PathVariable String email, @RequestBody UserDetailDTO userDetailDTO) {
+        return userService.updateUser(email, userDetailDTO);
+    }
+
+    // 회원 삭제
+    @DeleteMapping("/{email}")
+    public String deleteUser(@PathVariable String email) {
+        userService.deleteUser(email);
+        return "User deleted successfully";
     }
 }
