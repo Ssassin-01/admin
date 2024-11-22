@@ -4,8 +4,10 @@ import com.ExQuizMe.admin.repository.StudyTimeLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,39 +35,51 @@ public class StudyTimeLogService {
     }
 
     // 주차별 학습량 (기본값 포함)
-    public List<Integer> getWeeklyStudyTime(String email, int year, int month) {
-        List<Object[]> rawData = studyTimeLogRepository.getWeeklyStudyTime(email, year, month);
+    // 특정 연도와 월의 주차별 시작일과 종료일 반환
+    public List<Map<String, Object>> getWeekRanges(int year, int month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
-        // 최대 주차 수를 계산
-        int maxWeeks = rawData.stream()
-                .mapToInt(data -> (int) data[0]) // week 값을 추출
-                .max()
-                .orElse(0); // 데이터가 없으면 기본값 0
+        List<Map<String, Object>> weeks = new ArrayList<>();
 
-        // 주차 데이터를 0으로 초기화
-        int[] weeklyData = new int[maxWeeks];
-        Arrays.fill(weeklyData, 0); // 기본값으로 초기화
+        LocalDate currentStart = startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        while (currentStart.isBefore(endDate)) {
+            LocalDate currentEnd = currentStart.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+            if (currentEnd.isAfter(endDate)) {
+                currentEnd = endDate;
+            }
 
-        // 쿼리 결과를 배열에 매핑
-        rawData.forEach(data -> {
-            int week = (int) data[0] - 1; // week 값을 배열 인덱스로 변환
-            int totalStudyTime = ((Number) data[1]).intValue(); // 총 학습 시간
-            weeklyData[week] = totalStudyTime; // 데이터 매핑
-        });
+            weeks.add(Map.of(
+                    "week", weeks.size() + 1,
+                    "startDate", currentStart,
+                    "endDate", currentEnd
+            ));
 
-        // 배열을 리스트로 변환하여 반환
-        return IntStream.of(weeklyData).boxed().collect(Collectors.toList());
+            currentStart = currentEnd.plusDays(1);
+        }
+
+        return weeks;
     }
 
-
-    // 일별 학습량
+    // 특정 주차의 일별 학습량 반환
     public List<Map<String, Object>> getDailyStudyTime(String email, int year, int month, int week) {
-        List<Object[]> rawData = studyTimeLogRepository.getDailyStudyTime(email, year, month, week);
+        List<Map<String, Object>> weekRanges = getWeekRanges(year, month);
 
-        // 일별 데이터를 반환 (날짜 및 학습 시간)
-        return rawData.stream().map(data -> Map.of(
-                "date", data[0],
-                "studyTime", ((Number) data[1]).intValue()
-        )).collect(Collectors.toList());
+        if (week < 1 || week > weekRanges.size()) {
+            throw new IllegalArgumentException("Invalid week: " + week);
+        }
+
+        Map<String, Object> selectedWeek = weekRanges.get(week - 1);
+        LocalDate startDate = (LocalDate) selectedWeek.get("startDate");
+        LocalDate endDate = (LocalDate) selectedWeek.get("endDate");
+
+        List<Object[]> rawData = studyTimeLogRepository.getDailyStudyTime(email, startDate, endDate);
+
+        return rawData.stream()
+                .map(data -> Map.of(
+                        "date", data[0],
+                        "studyTime", ((Number) data[1]).intValue()
+                ))
+                .collect(Collectors.toList());
     }
 }

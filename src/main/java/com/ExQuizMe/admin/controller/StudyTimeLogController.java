@@ -24,12 +24,11 @@ public class StudyTimeLogController {
     }
 
     // 주차별 학습량
-    @GetMapping("/weekly")
-    public List<Integer> getWeeklyStudyTime(@RequestParam String email, @RequestParam int year, @RequestParam int month) {
-        return studyTimeLogService.getWeeklyStudyTime(email, year, month);
+    @GetMapping("/week-ranges")
+    public List<Map<String, Object>> getWeekRanges(@RequestParam int year, @RequestParam int month) {
+        return studyTimeLogService.getWeekRanges(year, month);
     }
 
-    // 선택된 주차의 일별 학습량
     @GetMapping("/daily")
     public List<Map<String, Object>> getDailyStudyTime(
             @RequestParam String email,
