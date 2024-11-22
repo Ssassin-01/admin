@@ -223,7 +223,7 @@ const UserDetailPage = () => {
                 )}
                 {activeTab === "subscriptions" && (
                     <div className="bg-gray-100 p-4 rounded-lg">
-                        <UserSub />
+                        <UserSub email={user.email} nickname={user.nickname} />
                     </div>
                 )}
             </div>

@@ -20,28 +20,39 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     margin-bottom: 20px;
-}
-
-.subscription-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; /* Flexbox를 사용하여 내부 요소를 가로로 정렬 */
+    justify-content: space-between; /* 텍스트와 버튼을 양쪽 끝에 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
 }
 
 .subscription-info p {
     margin: 0;
+    font-size: 16px;
+    color: #4a5568;
+    font-weight: 500;
 }
 
 .update-plan-button {
     background-color: #4C3D29;
     color: #fff;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .update-plan-button:hover {
     background-color: #7D6D57;
+    transform: translateY(-2px);
+}
+
+.update-plan-button.bg-green-500 {
+    background-color: #4C3D29;
+}
+
+.update-plan-button.bg-red-500 {
+    background-color: #dc3545;
 }

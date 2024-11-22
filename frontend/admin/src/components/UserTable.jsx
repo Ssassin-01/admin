@@ -5,7 +5,13 @@ import axios from 'axios';
 const UserTable = ({ users, setUsers, translateIdentity, translateSignupPurpose }) => {
     const [searchTerm, setSearchTerm] = useState(''); // 검색 상태
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달 상태
-    const [editUserData, setEditUserData] = useState(null); // 수정 중인 유저 데이터
+    const [editUserData, setEditUserData] = useState({
+        nickname: "",
+        password: "", // 비밀번호를 기본값으로 빈 문자열로 초기화
+        date: "",
+        gender: 0,
+    });
+
 
     // 페이징 상태
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
@@ -194,7 +200,7 @@ const UserTable = ({ users, setUsers, translateIdentity, translateSignupPurpose 
                             <input
                                 type="password"
                                 name="password"
-                                value={editUserData.password}
+                                value={editUserData?.password || ""}
                                 onChange={handleEditChange}
                                 className="w-full p-2 border border-gray-300 rounded-lg"
                             />

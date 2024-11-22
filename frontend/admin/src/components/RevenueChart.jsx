@@ -1,5 +1,16 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    Line,
+    ComposedChart
+} from "recharts";
 
 const RevenueChart = ({ monthlyData, year, subscriptionRate, onRateChange, onYearChange }) => (
     <section className="bg-white p-6 rounded-lg shadow-md mb-10">
@@ -35,15 +46,31 @@ const RevenueChart = ({ monthlyData, year, subscriptionRate, onRateChange, onYea
 
         {/* 수익률 그래프 */}
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={monthlyData}>
+            <ComposedChart data={monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
-                <YAxis />
+                <YAxis
+                    yAxisId="left"
+                    orientation="left"
+                    label={{ value: "수익(원)", angle: -90, position: "insideLeft" }}
+                />
+                <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    label={{ value: "구독자 수(명)", angle: -90, position: "insideRight" }}
+                />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="revenue" name="수익" fill="#8884d8" />
-                <Bar dataKey="subscribers" name="구독자 수" fill="#82ca9d" />
-            </BarChart>
+                <Bar yAxisId="left" dataKey="revenue" name="수익(원)" fill="#8884d8" />
+                <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="subscribers"
+                    name="구독자 수(명)"
+                    stroke="#82ca9d"
+                    strokeWidth={3}
+                />
+            </ComposedChart>
         </ResponsiveContainer>
     </section>
 );

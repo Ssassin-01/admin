@@ -22,10 +22,17 @@ public class SubscriptionController {
     }
 
     @PostMapping("/updateSubscription")
-    public ResponseEntity<String> updateSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
-        subscriptionService.updateSubscriptionPlan(subscriptionDTO.getEmail(), subscriptionDTO.getSubscriptionPlan());
-        return ResponseEntity.ok("Subscription updated successfully");
+    public ResponseEntity<String> addSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
+        subscriptionService.addSubscription(subscriptionDTO);
+        return ResponseEntity.ok("Subscription added successfully");
     }
+
+    @DeleteMapping("/deleteSubscription")
+    public ResponseEntity<String> deleteSubscription(@RequestParam String email) {
+        subscriptionService.deleteSubscription(email);
+        return ResponseEntity.ok("Subscription deleted successfully");
+    }
+
 
     @GetMapping("/monthlySubscribers")
     public ResponseEntity<List<Map<String, Object>>> getMonthlySubscribers(@RequestParam int year) {
