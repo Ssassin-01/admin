@@ -6,6 +6,7 @@ import com.ExQuizMe.admin.entity.User;
 import com.ExQuizMe.admin.repository.CardAccessLogRepository;
 import com.ExQuizMe.admin.repository.CardBookmarkRepository;
 import com.ExQuizMe.admin.repository.UserRepository;
+import com.ExQuizMe.admin.repository.WordBookmarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,10 @@ public class UserService {
     private CardAccessLogRepository cardAccessLogRepository;
 
     @Autowired
-    private CardBookmarkRepository cardBookmarkRepository; // 추가
+    private CardBookmarkRepository cardBookmarkRepository;
+
+    @Autowired
+    private WordBookmarkRepository wordBookmarkRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -92,11 +96,17 @@ public class UserService {
         User user = userRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 관련 데이터 명시적 삭제
-        cardAccessLogRepository.deleteByUserEmail(email);
-        cardBookmarkRepository.deleteByUserEmail(email); // 추가
+        System.out.println("Deleting related word bookmarks...");
+        wordBookmarkRepository.deleteByUserEmail(email);
 
-        // User 삭제
+        System.out.println("Deleting related card access logs...");
+        cardAccessLogRepository.deleteByUserEmail(email);
+
+        System.out.println("Deleting related card bookmarks...");
+        cardBookmarkRepository.deleteByUserEmail(email);
+
+        System.out.println("Deleting user...");
         userRepository.delete(user);
+        System.out.println("User deletion completed.");
     }
 }
