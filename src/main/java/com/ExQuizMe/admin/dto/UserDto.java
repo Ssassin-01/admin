@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class UserDto {
-    private int id; // 번호 필드
+    private int id;
     private String email;
     private LocalDate date;
     private Integer gender;

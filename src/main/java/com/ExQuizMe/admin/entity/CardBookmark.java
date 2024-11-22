@@ -24,7 +24,7 @@ public class CardBookmark {
 
     @ManyToOne
     @JoinColumn(name = "email", referencedColumnName = "email")
-    @JsonIgnore // 순환 참조 방지를 위해 User 직렬화에서 제외
+    @JsonIgnore
     private User user;
 
     @ManyToOne

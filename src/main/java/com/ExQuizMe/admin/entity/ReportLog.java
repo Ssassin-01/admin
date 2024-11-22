@@ -17,7 +17,7 @@ public class ReportLog {
 
     @ManyToOne
     @JoinColumn(name = "card_number", referencedColumnName = "card_number")
-    private Card card;  // 신고 대상 단어장과의 관계
+    private Card card;
 
     @Column(name = "reason")
     private String reason;

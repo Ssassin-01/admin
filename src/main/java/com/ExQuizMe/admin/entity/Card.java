@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"vocabularyItems"})  // vocabularyItems 필드를 직렬화할 때 무시
+@JsonIgnoreProperties({"vocabularyItems"})
 @Table(name = "card")
 public class Card {
     @Id
@@ -27,7 +27,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "email", referencedColumnName = "email")
-    @JsonBackReference // 직렬화에서 자식 역할을 설정하여 무한 재귀를 방지
+    @JsonBackReference
     private User user;
 
     @Column(name = "title")
@@ -50,7 +50,7 @@ public class Card {
     private Integer countView = 0;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("card")  // card 필드를 직렬화할 때 무시
+    @JsonIgnoreProperties("card")
     private List<VocabularyItem> vocabularyItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)

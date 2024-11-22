@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "card_access_logs", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email", "card_number"}) // Unique constraint 추가
+        @UniqueConstraint(columnNames = {"email", "card_number"})
 })
 public class CardAccessLog {
     @Id
@@ -28,5 +28,4 @@ public class CardAccessLog {
     @Temporal(TemporalType.TIMESTAMP)
     private Date accessTime;
 
-    // Getters and setters
 }

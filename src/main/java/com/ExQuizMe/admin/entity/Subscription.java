@@ -27,7 +27,6 @@ public class Subscription {
     @JsonBackReference
     private User user;
 
-    // Assuming subscription_plan is a type of subscription rather than a date
     @Column(name = "subscription_plan")
     private String subscriptionPlan;
 
@@ -36,6 +35,4 @@ public class Subscription {
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
-
-    // Getters and setters
 }

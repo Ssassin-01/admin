@@ -19,12 +19,11 @@ public class StudyTimeLog {
     private User user;
 
     @Column(name = "study_time", nullable = false)
-    private Long studyTime;  // 학습 시간 (초 단위)
+    private Long studyTime;
 
     @Column(name = "study_date", nullable = false)
-    private LocalDate studyDate;  // 학습 날짜
+    private LocalDate studyDate;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -49,7 +49,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<UserActivity> activities; // 활동 기록 필드 추가
+    private List<UserActivity> activities;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,13 +57,12 @@ public class User {
     private List<Card> cards;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudyTimeLog> studyLogs = new ArrayList<>();  // StudyTimeLog와의 관계
+    private List<StudyTimeLog> studyLogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Subscription> subscriptions = new ArrayList<>();
 
-    // 필요한 필드를 포함한 생성자 (activities 포함)
 
     public User(String email, String encode, String nickname, String telNumber, LocalDate date, Integer gender, String signupPurpose, String identity, String oneLineResolution, String roleUser) {
         this.email = email;
@@ -76,8 +75,8 @@ public class User {
         this.identity = identity;
         this.oneLineResolution = oneLineResolution;
         this.permission = roleUser;
-        this.activities = Collections.emptyList();  // activities 필드를 빈 리스트로 초기화
-        this.cards = Collections.emptyList();  // cards 필드를 빈 리스트로 초기화
-        this.subscriptions = Collections.emptyList(); // subscriptions 필드를 빈 리스트로 초기화
+        this.activities = Collections.emptyList();
+        this.cards = Collections.emptyList();
+        this.subscriptions = Collections.emptyList();
     }
 }

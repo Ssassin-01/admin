@@ -27,5 +27,5 @@ public class UserActivity {
     private LocalDate loginDate;
 
     @Column(name = "time_spent", nullable = false)
-    private int timeSpent; // 로그인 시간 (분 단위)
+    private int timeSpent;
 }

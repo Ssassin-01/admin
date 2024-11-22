@@ -11,7 +11,6 @@ public class StudyTimeLogDTO {
         this.studyTime = studyTime;
     }
 
-    // Getters and Setters
     public LocalDate getStudyDate() {
         return studyDate;
     }
