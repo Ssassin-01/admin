@@ -31,4 +31,6 @@ public class CardController {
     public ResponseEntity<List<CardResponseDTO>> getUserCards(@PathVariable String email) {
         return ResponseEntity.ok(cardService.getUserCards(email));
     }
+
+
 }

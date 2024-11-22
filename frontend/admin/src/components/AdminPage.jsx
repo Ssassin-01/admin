@@ -1,55 +1,93 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Sidebar from "./Sidebar";
-import UserTable from './UserTable';
+import UserTable from "./UserTable";
+import RevenueChart from "./RevenueChart";
 
 const AdminPage = () => {
-    const [message, setMessage] = useState('');
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [monthlyData, setMonthlyData] = useState([]);
+    const [subscriptionRate, setSubscriptionRate] = useState(1500); // 기본값
     const [users, setUsers] = useState([]);
 
-    const data = [
-        { name: '1월', uv: 4000, pv: 2400 },
-        { name: '2월', uv: 3000, pv: 1398 },
-        { name: '3월', uv: 2000, pv: 9800 },
-        { name: '4월', uv: 2780, pv: 3908 },
-        { name: '5월', uv: 1890, pv: 4800 },
-        { name: '6월', uv: 2390, pv: 3800 },
-        { name: '7월', uv: 3490, pv: 4300 },
-    ];
+    useEffect(() => {
+        fetchMonthlySubscribers();
+        fetchUsers();
+    }, [year]);
+
+    const fetchMonthlySubscribers = () => {
+        axios
+            .get(`/api/userSub/monthlySubscribers`, { params: { year } })
+            .then((response) => {
+                const data = response.data.map((item) => ({
+                    month: `${item.month}월`,
+                    subscribers: item.subscriberCount,
+                    revenue: item.subscriberCount * subscriptionRate,
+                }));
+                setMonthlyData(data);
+            })
+            .catch((error) => console.error("Error fetching monthly subscribers!", error));
+    };
+
+    const fetchUsers = () => {
+        axios
+            .get("/api/users")
+            .then((response) => setUsers(response.data))
+            .catch((error) => console.error("Error fetching users!", error));
+    };
+
+    const handleRateChange = (newRate) => {
+        const rate = parseInt(newRate, 10) || 1500;
+        setSubscriptionRate(rate);
+
+        // 수익률 업데이트
+        setMonthlyData((prevData) =>
+            prevData.map((item) => ({
+                ...item,
+                revenue: item.subscribers * rate,
+            }))
+        );
+    };
+
+    const handleYearChange = (newYear) => {
+        setYear(newYear);
+    };
 
     const translateIdentity = (identity) => {
         switch (identity) {
-            case 'elementary': return '초등학생';
-            case 'middle': return '중학생';
-            case 'high': return '고등학생';
-            case 'college': return '대학생';
-            case 'adult': return '어른';
-            default: return identity;
+            case "elementary":
+                return "초등학생";
+            case "middle":
+                return "중학생";
+            case "high":
+                return "고등학생";
+            case "college":
+                return "대학생";
+            case "adult":
+                return "어른";
+            default:
+                return identity;
         }
     };
 
     const translateSignupPurpose = (purpose) => {
         switch (purpose) {
-            case 'elementary_vocabulary': return '초등영단어';
-            case 'middle_vocabulary': return '중등영단어';
-            case 'high_vocabulary': return '고등영단어';
-            case 'csat': return '수능';
-            case 'toeic': return '토익';
-            case 'toefl': return '토플';
-            default: return purpose;
+            case "elementary_vocabulary":
+                return "초등영단어";
+            case "middle_vocabulary":
+                return "중등영단어";
+            case "high_vocabulary":
+                return "고등영단어";
+            case "csat":
+                return "수능";
+            case "toeic":
+                return "토익";
+            case "toefl":
+                return "토플";
+            default:
+                return purpose;
         }
     };
-
-    useEffect(() => {
-        axios.get('/api/admin')
-            .then(response => setMessage(response.data))
-            .catch(error => console.error('There was an error fetching the message!', error));
-
-        axios.get('/api/users')
-            .then(response => setUsers(response.data))
-            .catch(error => console.error('Error fetching users!', error));
-    }, []);
 
     return (
         <div className="min-h-screen bg-gray-100 flex">
@@ -59,26 +97,16 @@ const AdminPage = () => {
                     <h1 className="text-3xl font-bold">관리자 페이지</h1>
                 </header>
 
-                <section className="bg-white p-6 rounded-lg shadow-md mb-10">
-                    <h2 className="text-xl font-semibold mb-4">서버 메시지</h2>
-                    <p className="text-lg">{message || 'admin 잘되네!'}</p>
-                </section>
+                {/* Revenue Chart */}
+                <RevenueChart
+                    monthlyData={monthlyData}
+                    year={year}
+                    subscriptionRate={subscriptionRate}
+                    onRateChange={handleRateChange}
+                    onYearChange={handleYearChange}
+                />
 
-                <section className="bg-white p-6 rounded-lg shadow-md mb-10">
-                    <h2 className="text-xl font-semibold mb-4">월별 활동 그래프</h2>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={data}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="uv" fill="#8884d8" />
-                            <Bar dataKey="pv" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </section>
-
+                {/* User Table */}
                 <UserTable
                     users={users}
                     setUsers={setUsers}

@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/userSub")
 @RequiredArgsConstructor
@@ -22,5 +25,10 @@ public class SubscriptionController {
     public ResponseEntity<String> updateSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
         subscriptionService.updateSubscriptionPlan(subscriptionDTO.getEmail(), subscriptionDTO.getSubscriptionPlan());
         return ResponseEntity.ok("Subscription updated successfully");
+    }
+
+    @GetMapping("/monthlySubscribers")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlySubscribers(@RequestParam int year) {
+        return ResponseEntity.ok(subscriptionService.getMonthlySubscribers(year));
     }
 }

@@ -6,7 +6,7 @@ import com.ExQuizMe.admin.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +33,19 @@ public class SubscriptionService {
             sub.setSubscriptionPlan(newPlan);
             subscriptionRepository.save(sub);
         });
+    }
+
+    public List<Map<String, Object>> getMonthlySubscribers(int year) {
+        List<Object[]> results = subscriptionRepository.findMonthlySubscribers(year);
+        List<Map<String, Object>> monthlyData = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("month", row[0]); // 월
+            data.put("subscriberCount", row[1]); // 구독자 수
+            monthlyData.add(data);
+        }
+
+        return monthlyData;
     }
 }
