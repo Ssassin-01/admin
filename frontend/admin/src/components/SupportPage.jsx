@@ -6,14 +6,14 @@ import Sidebar from "./Sidebar";
 const SupportPage = () => {
     const [reports, setReports] = useState([]);
     const [sortedReports, setSortedReports] = useState([]);
-    const [sortOrder, setSortOrder] = useState('default'); // 기본 정렬 상태
-    const [searchTerm, setSearchTerm] = useState(''); // 검색 상태
+    const [sortOrder, setSortOrder] = useState('default');
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         axios.get('/api/reports')
             .then(response => {
                 setReports(response.data);
-                setSortedReports(response.data); // 기본적으로 전체 데이터로 설정
+                setSortedReports(response.data);
             })
             .catch(error => console.error('Error fetching reports:', error));
     }, []);

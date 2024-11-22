@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const UserTable = ({ users, setUsers, translateIdentity, translateSignupPurpose }) => {
-    const [searchTerm, setSearchTerm] = useState(''); // 검색 상태
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달 상태
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editUserData, setEditUserData] = useState({
         nickname: "",
-        password: "", // 비밀번호를 기본값으로 빈 문자열로 초기화
+        password: "",
         date: "",
         gender: 0,
     });
 
 
     // 페이징 상태
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const [pageSize, setPageSize] = useState(20); // 페이지당 아이템 수
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
 
     // 검색된 유저 목록 필터링
     const filteredUsers = users.filter(user =>
@@ -29,7 +29,7 @@ const UserTable = ({ users, setUsers, translateIdentity, translateSignupPurpose 
     const startIndex = (currentPage - 1) * pageSize;
     const paginatedUsers = filteredUsers.slice(startIndex, startIndex + pageSize);
 
-    const totalPages = Math.ceil(filteredUsers.length / pageSize); // 총 페이지 수
+    const totalPages = Math.ceil(filteredUsers.length / pageSize);
 
     // 삭제 핸들러
     const handleDeleteUser = (email) => {

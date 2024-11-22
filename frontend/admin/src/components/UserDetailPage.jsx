@@ -18,15 +18,13 @@ const UserDetailPage = () => {
 
     const [user, setUser] = useState(null);
     const [activeTab, setActiveTab] = useState("user");
-    const [activeChart, setActiveChart] = useState("monthlyStudy"); // 학습량 버튼 상태 관리
+    const [activeChart, setActiveChart] = useState("monthlyStudy");
     const [cards, setCards] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null);
 
-    // 월별 학습량
     const [year, setYear] = useState(new Date().getFullYear());
     const [monthlyStudyData, setMonthlyStudyData] = useState([]);
 
-    // 주차별 학습량
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [weekOptions, setWeekOptions] = useState([]);
     const [week, setWeek] = useState(1);
@@ -204,18 +202,16 @@ const UserDetailPage = () => {
                                 card={selectedCard}
                                 onClose={() => setSelectedCard(null)}
                                 onDeleteCard={(deletedCardNumber) => {
-                                    // 카드 삭제 후 리스트 업데이트
                                     setCards(cards.filter((c) => c.cardNumber !== deletedCardNumber));
-                                    setSelectedCard(null); // 디테일 보기 닫기
+                                    setSelectedCard(null);
                                 }}
                                 updateCard={(updatedCard) => {
-                                    // 단어 삭제 후 업데이트된 카드 데이터 적용
                                     setCards(
                                         cards.map((c) =>
                                             c.cardNumber === updatedCard.cardNumber ? updatedCard : c
                                         )
                                     );
-                                    setSelectedCard(updatedCard); // 디테일 창에 업데이트된 데이터 반영
+                                    setSelectedCard(updatedCard);
                                 }}
                             />
                         )}
